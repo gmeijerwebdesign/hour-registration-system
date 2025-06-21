@@ -15,6 +15,12 @@ export default function Index() {
       <Link href={"/settings"}>
         <Text style={{ color: "blue" }}>Instellingen</Text>
       </Link>
+      <Link href={"/auth/login"}>
+        <Text style={{ color: "red" }}>Login</Text>
+      </Link>
+      <Link href={"/auth/register"}>
+        <Text style={{ color: "purple" }}>Register</Text>
+      </Link>
     </View>
   );
 }
