@@ -1,7 +1,24 @@
-import { Link } from "expo-router";
+import { useAuth } from "@/lib/auth-context";
+import { supabase } from "@/lib/supabase";
+import { Button } from "@react-navigation/elements";
+import { Link, router } from "expo-router";
 import { Text, View } from "react-native";
-
 export default function Index() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  async function handleLogout() {
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+      router.replace("/"); // terug naar home
+    } else {
+      alert(error.message);
+    }
+  }
+
   return (
     <View
       style={{
@@ -10,7 +27,13 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Text>
+        {user ? (
+          <Text>Welkom, {user.email}</Text>
+        ) : (
+          <Text>Je bent niet ingelogd.</Text>
+        )}
+      </Text>
       {/* Navigation */}
       <Link href={"/settings"}>
         <Text style={{ color: "blue" }}>Instellingen</Text>
@@ -21,6 +44,7 @@ export default function Index() {
       <Link href={"/auth/register"}>
         <Text style={{ color: "purple" }}>Register</Text>
       </Link>
+      <Button onPress={handleLogout}>Logout</Button>
     </View>
   );
 }
